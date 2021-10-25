@@ -1,0 +1,293 @@
+CREATE TABLE lab03.wykladowca (
+                id_wykladowca INTEGER NOT NULL,
+                nazwisko VARCHAR(60) NOT NULL,
+                imie VARCHAR(50) NOT NULL,
+                CONSTRAINT wykladowca_pk PRIMARY KEY (id_wykladowca)
+);
+
+
+CREATE TABLE lab03.uczestnik (
+                id_uczestnik INTEGER NOT NULL,
+                miejscowosc VARCHAR(60) NOT NULL,
+                kod_pocztowy VARCHAR(6) NOT NULL,
+                nazwisko VARCHAR(60) NOT NULL,
+                adres VARCHAR(200) NOT NULL,
+                imie VARCHAR(50) NOT NULL,
+                CONSTRAINT uczestnik_pk PRIMARY KEY (id_uczestnik)
+);
+
+
+CREATE TABLE lab03.kurs_opis (
+                id_kurs INTEGER NOT NULL,
+                opis VARCHAR(200) NOT NULL,
+                CONSTRAINT kurs_opis_pk PRIMARY KEY (id_kurs)
+);
+
+
+CREATE TABLE lab03.kurs (
+                id_kurs INTEGER NOT NULL,
+                id_grupa INTEGER NOT NULL,
+                id_kurs_nazwa INTEGER NOT NULL,
+                termin_p DATE,
+                termin_k DATE,
+                CONSTRAINT kurs_pk PRIMARY KEY (id_kurs, id_grupa)
+);
+
+
+CREATE TABLE lab03.wykl_kurs (
+                id_grupa INTEGER NOT NULL,
+                id_kurs INTEGER NOT NULL,
+                id_wykl INTEGER NOT NULL
+);
+
+
+CREATE TABLE lab03.uczestnik_kurs (
+                id_uczest INTEGER NOT NULL,
+                id_kurs INTEGER NOT NULL,
+                id_grupa INTEGER NOT NULL
+);
+
+
+ALTER TABLE lab03.wykl_kurs ADD CONSTRAINT wykladowca_wykl_kurs_fk
+FOREIGN KEY (id_wykl)
+REFERENCES lab03.wykladowca (id_wykladowca)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE lab03.uczestnik_kurs ADD CONSTRAINT uczestnik_uczestnik_kurs_fk
+FOREIGN KEY (id_uczest)
+REFERENCES lab03.uczestnik (id_uczestnik)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE lab03.kurs ADD CONSTRAINT kurs_opis_kurs_fk
+FOREIGN KEY (id_kurs)
+REFERENCES lab03.kurs_opis (id_kurs)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE lab03.uczestnik_kurs ADD CONSTRAINT kurs_uczestnik_kurs_fk
+FOREIGN KEY (id_grupa, id_kurs)
+REFERENCES lab03.kurs (id_grupa, id_kurs)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE lab03.wykl_kurs ADD CONSTRAINT kurs_wykl_kurs_fk
+FOREIGN KEY (id_kurs, id_grupa)
+REFERENCES lab03.kurs (id_kurs, id_grupa)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE "u9zaczyk"."lab03"."kurs" DROP COLUMN termin;
+
+ALTER TABLE "u9zaczyk"."lab03"."uczestnik_kurs" DROP COLUMN id_grupa;
+
+ALTER TABLE "u9zaczyk"."lab03"."wykl_kurs" DROP COLUMN id_grupa;
+
+ALTER TABLE "u9zaczyk"."lab03"."kurs" ADD COLUMN "termin_p" DATE NOT NULL;
+
+ALTER TABLE "u9zaczyk"."lab03"."kurs" ADD COLUMN "termin_k" DATE NOT NULL;
+
+ALTER TABLE ONLY "u9zaczyk"."lab03"."kurs" ALTER COLUMN "id_nazwa" TYPE INTEGER, ALTER COLUMN "id_nazwa" SET NOT NULL;
+
+ALTER TABLE "u9zaczyk"."lab03"."uczestnik" ADD COLUMN "adres" VARCHAR(200);
+
+ALTER TABLE "u9zaczyk"."lab03"."uczestnik" ADD COLUMN "kod_pocztowy" VARCHAR(6);
+
+ALTER TABLE "u9zaczyk"."lab03"."uczestnik" ADD COLUMN "miejscowosc" VARCHAR(60);
+
+
+--wypełnianie tabel
+
+insert into lab03.uczestnik ( id_uczestnik, nazwisko, imie, miejscowosc, kod_pocztowy, adres) values 
+( 1, 'Flisikowski', 'Jan', 'Krakow', '30-059', 'ul. kazimierza'),
+( 2, 'Olech', 'Andrzej', 'Krakow', '30-059', 'ul. kazimierza'       ),
+( 3, 'Płochocki', 'Piotr', 'Krakow', '30-059', 'ul. kazimierza'    ),
+( 4, 'Stachyra', 'Krzysztof', 'Krakow', '30-059', 'ul. kazimierza' ),
+( 5, 'Sztuka', 'Stanisław', 'Krakow', '30-059', 'ul. kazimierza'   ),
+( 6, 'Sosin', 'Tomasz', 'Krakow', '30-059', 'ul. kazimierza'       ),
+( 7, 'Głowala', 'Paweł', 'Krakow', '30-059', 'ul. kazimierza'      ),
+( 8, 'Straszewski', 'Józef', 'Krakow', '30-059', 'ul. kazimierza'  ),
+( 9, 'Dwojak', 'Marcin', 'Krakow', '30-059', 'ul. kazimierza'      ),
+(10, 'Kotulski', 'Marek', 'Krakow', '30-059', 'ul. kazimierza'    ),
+(11, 'Łaski', 'Michał' , 'Krakow', '30-059', 'ul. kazimierza'      ),
+(12, 'Iwanowicz', 'Grzegorz', 'Krakow', '30-059', 'ul. kazimierza' ),
+(13, 'Barnaś', 'Jerzy', 'Krakow', '30-059', 'ul. kazimierza'       ),
+(14, 'Stachera', 'Tadeusz', 'Krakow', '30-059', 'ul. kazimierza'   ),
+(15, 'Gzik', 'Adam', 'Krakow', '30-059', 'ul. kazimierza'          ),
+(16, 'Całus', 'Łukasz', 'Krakow', '30-059', 'ul. kazimierza'       ),
+(17, 'Kołodziejek', 'Zbigniew', 'Krakow', '30-059', 'ul. kazimierza'),
+(18, 'Bukowiecki', 'Ryszard', 'Krakow', '30-059', 'ul. kazimierza' ),
+(19, 'Sielicki', 'Dariusz', 'Krakow', '30-059', 'ul. kazimierza'   ),
+(20, 'Radziszewski', 'Henryk', 'Krakow', '30-059', 'ul. kazimierza'),
+(21, 'Szcześniak', 'Mariusz', 'Krakow', '30-059', 'ul. kazimierza' ),
+(22, 'Nawara', 'Kazimierz', 'Krakow', '30-059', 'ul. kazimierza'   ),
+(23, 'Kęski', 'Wojciech', 'Krakow', '30-059', 'ul. kazimierza'     ),
+(24, 'Rafalski', 'Robert', 'Krakow', '30-059', 'ul. kazimierza'    ),
+(25, 'Hołownia', 'Mateusz', 'Krakow', '30-059', 'ul. kazimierza'   ),
+(26, 'Niedziałek', 'Marian', 'Krakow', '30-059', 'ul. kazimierza'  ),
+(27, 'Matuszczak', 'Rafał', 'Krakow', '30-059', 'ul. kazimierza'   ),
+(28, 'Wolf', 'Jacek', 'Krakow', '30-059', 'ul. kazimierza'         ),
+(29, 'Kolczyński', 'Janusz', 'Krakow', '30-059', 'ul. kazimierza'  ),
+(30, 'Chrobok', 'Mirosław', 'Krakow', '30-059', 'ul. kazimierza'   )  ;
+--
+-- wstawienie danych - tabela kurs_opis
+insert into lab03.kurs_opis ( id_kurs, opis ) values
+( 1, 'Język angielski, stopień 1'),
+( 2, 'Język angielski, stopień 2'),
+( 3, 'Język angielski, stopień 3'), 
+( 4, 'Język angielski, stopień 4'),
+( 5, 'Język angielski, stopień 5'),
+( 6, 'Język niemiecki, stopień 1'),
+( 7, 'Język niemiecki, stopień 2'),
+( 8, 'Język niemiecki, stopień 3'),
+( 9, 'Język niemiecki, stopień 4'),
+(10, 'Język hiszpański, stopień 1'),
+(11, 'Język hiszpański, stopień 2'),
+(12, 'Język hiszpański, stopień 3') ;
+--
+-- wstawienie danych - tabela wykladowca
+insert into lab03.wykladowca ( id_wykladowca, imie, nazwisko ) values 
+( 1, 'Marcin','Szymczak'),
+( 2, 'Joanna','Baranowska'),
+( 3, 'Maciej','Szczepański'),
+( 4, 'Czesław','Wróbel'),
+( 5, 'Grażyna','Górska'),
+( 6, 'Wanda','Krawczyk'),
+( 7, 'Renata','Urbańska'),
+( 8, 'Wiesława','Tomaszewska'),
+( 9, 'Bożena','Baranowska'),
+(10, 'Ewelina','Malinowska'),
+(11, 'Anna','Krajewska'),
+(12, 'Mieczysław','Zając'),
+(13, 'Wiesław','Przybylski'),
+(14, 'Dorota','Tomaszewska'),
+(15, 'Jerzy','Wróblewski') ;
+--
+-- wstawienie danych - tabela kurs
+insert into lab03.kurs ( id_kurs, id_grupa, id_kurs_nazwa, termin_p, termin_k ) values
+( 1, 1, 1, '2021-04-12','2021-04-15'),
+( 2, 2, 1, '2021-04-12','2021-04-15'),
+( 3, 1, 2, '2021-04-03','2021-04-16'),
+( 4, 1, 3, '2021-08-17','2021-09-09'),
+( 5, 1, 4, '2021-03-19','2021-05-25'),
+( 6, 1, 6, '2021-04-12','2021-04-15'),
+( 7, 2, 6, '2021-04-12','2021-04-15'),
+( 8, 1, 7, '2021-04-03','2021-04-16'),
+( 9, 1, 8, '2021-02-19','2021-07-06'),
+(10, 1, 10, '2021-09-19','2021-10-08'),
+(11, 1, 11, '2021-11-03','2021-12-09') ; 
+--
+-- wstawienie danych - tabela wykl_kurs - wykladowcy na kursach
+insert into lab03.wykl_kurs ( id_kurs, id_wykl ) values
+( 1, 1 ),
+( 2, 2 ),
+( 3, 1 ),
+( 4, 1 ),
+( 5, 3 ),
+( 6, 4 ),
+( 7, 5 ),
+( 8, 4 ),
+( 9, 4 ),
+(10, 11 ),
+(11, 11 ) ; 
+--
+-- wstawienie danych - tabela uczest_kurs - uczestnicy na kursach
+insert into lab03.uczestnik_kurs ( id_kurs, id_uczest ) values
+-- kurs 1 - angielski 1 gr 1
+( 1, 1 ),
+( 1, 3 ),
+( 1, 5 ),
+( 1, 7 ),
+( 1, 8 ),
+( 1, 10 ),
+( 1, 11 ),
+( 1, 12 ),
+-- kurs 2 - angielski 1 gr 2
+( 2, 2 ),
+( 2, 16 ),
+( 2, 17 ),
+( 2, 18 ),
+( 2, 20 ),
+-- kurs 3 - angielski 2 gr 1
+( 3, 1 ),
+( 3, 2 ),
+( 3, 3 ),
+( 3, 5 ),
+( 3, 7 ),
+( 3, 17 ),
+( 3, 18 ),
+( 3, 20 ),
+-- kurs 4 - angielski 3 gr 1
+( 4, 1 ),
+( 4, 2 ),
+( 4, 3 ),
+( 4, 5 ),
+( 4, 21 ),
+( 4, 22 ),
+( 4, 25 ),
+-- kurs 5 - angielski 4 gr 1
+( 5, 1 ),
+( 5, 2 ),
+( 5, 3 ),
+( 5, 5 ),
+( 5, 21 ),
+( 5, 22 ),
+-- kurs 6 - niemiecki 1 gr 1
+( 6, 8 ),
+( 6, 9 ),
+( 6, 13 ),
+( 6, 15 ),
+( 6, 19 ),
+( 6, 24 ),
+( 6, 27 ),
+-- kurs 7 - niemiecki 1 gr 2
+( 7, 11 ),
+( 7, 17 ),
+( 7, 18 ),
+( 7, 23 ),
+( 7, 25 ),
+( 7, 28 ),
+( 7, 30 ),
+-- kurs 8 - niemiecki 2 gr 1
+( 8, 8 ),
+( 8, 9 ),
+( 8, 13 ),
+( 8, 15 ),
+( 8, 19 ),
+( 8, 24 ),
+( 8, 27 ),
+-- kurs 9 - niemiecki 3 gr 1
+( 9, 8 ),
+( 9, 9 ),
+( 9, 13 ),
+( 9, 24 ),
+( 9, 27 ),
+-- kurs 10 - hiszpanski 1 gr 1
+(10, 6 ),
+(10, 16 ),
+(10, 18 ),
+(10, 22 ),
+(10, 24 ),
+(10, 29 ),
+(10, 30 ),
+-- kurs 11 - hiszpanski 2 gr 1
+(11, 6 ),
+(11, 16 ),
+(11, 18 ),
+(11, 22 ),
+(11, 24 ),
+(11, 29 ),
+(11, 30 ) ;
+
+--polecenie skryptu
+SELECT uczestnik.nazwisko, uczestnik.imie, kurs_opis.opis, kurs.id_kurs, kurs.id_grupa
+FROM lab03.kurs, lab03.uczestnik_kurs, lab03.uczestnik, lab03.kurs_opis
+WHERE kurs.id_kurs = uczestnik_kurs.id_kurs and  
+      uczestnik.id_uczestnik = uczestnik_kurs.id_uczest and
+      kurs.id_kurs_nazwa = kurs_opis.id_kurs ;
