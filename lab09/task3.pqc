@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+char * dbuser = "u9zaczyk";
+char * dbpass  = "9zaczyk";
+char * dbhost = "pascal";
+char * dbport = "5432";
+
+EXEC SQL BEGIN DECLARE SECTION;
+        char dbname[128];
+        char user[150];
+        char password[150];
+        char host[50];
+        char port[50];
+        int  course_id;
+        bool isId = false;
+        int  numberOfStudent;
+        int  id;
+        char fname[64];
+        char lname[64];
+        char opis[64];
+EXEC SQL END DECLARE SECTION;
+
+int main(int argc, char** argv){
+
+        strcpy(user, dbuser);
+        strcpy(password, dbpass);
+        strcpy(host, dbhost);
+        strcpy(port, dbport);
+
+        if(argc >= 2){
+                course_id = atoi(argv[1]);
+                isId = true;
+        }
+
+        if(isId){
+                printf("Podano id: %d\n", course_id);
+
+
+                EXEC SQL CONNECT TO :dbname AS conn USER :user USING :password;
+
+                EXEC SQL SELECT COUNT(*) INTO :numberOfStudent
+                        FROM (SELECT id_uczestnik, imie, nazwisko, opis
+                                FROM lab04.uczest_kurs
+                                JOIN lab04.uczestnik ON id_uczestnik = id_uczest
+                                JOIN lab04.kurs_opis USING (id_kurs)
+                                WHERE id_kurs = :course_id
+                                ORDER BY 1) AS counter;
+
+                printf("Liczba studentow: %d\n\n", numberOfStudent);
+
+                EXEC SQL DECLARE ucz CURSOR FOR 
+                        SELECT id_uczestnik, imie, nazwisko, opis
+                        FROM lab04.uczest_kurs
+                        JOIN lab04.uczestnik ON id_uczestnik = id_uczest
+                        JOIN lab04.kurs_opis USING (id_kurs)
+                        WHERE id_kurs = :course_id
+                        ORDER BY 1;
+                EXEC SQL OPEN ucz;
+
+                for(int i = 0; i < numberOfStudent; i++){
+                        EXEC SQL FETCH NEXT FROM ucz INTO :id, :fname, :lname, :opis;
+                        printf("%d | %s \t| %s \t| %s\n", id, fname, lname, opis);
+                }
+                EXEC SQL CLOSE ucz;
+                EXEC SQL DISCONNECT ALL;
+        }
+        else
+                printf("Nie podano id\n");
+
+        
+        return 0;
+}

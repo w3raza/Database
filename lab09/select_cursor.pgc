@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+char * p_dbase = "DB1_lab02@localhost:5432";	//"tcp:postgresql://localhost:5432/DB1_lab02";
+char * p_user = "kursman";
+char * p_pass = "Passw0rd";
+
+EXEC SQL BEGIN DECLARE SECTION;
+	char dbname[1024];
+	char connection_string[128];
+	char user[64];
+	char password[32];
+
+	int id;
+	char fname[64];
+	char lname[64];
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL WHENEVER NOT FOUND DO BREAK;
+
+int main()
+{
+	std::cout << "Postgres Embeded SQL Application" << std::endl << std::endl;
+	
+
+	// initialize SQL variable
+	strcpy_s(connection_string,p_dbase);
+	strcpy_s(user,p_user);
+	strcpy_s(password,p_pass);
+
+	EXEC SQL DECLARE cur_uczestnik CURSOR FOR SELECT id_uczestnik,imie,nazwisko 
+        FROM uczestnik ORDER BY nazwisko, imie;
+
+
+	EXEC SQL CONNECT TO :connection_string AS conn  USER :user USING :password;
+
+	// open a cursor
+    	EXEC SQL OPEN cur_uczestnik;
+ 
+    	// loop up to end of data
+	for(;;)
+	{
+        	// fetch next record
+	        EXEC SQL FETCH NEXT FROM cur_uczestnik INTO :id, :fname, :lname;
+ 		std::cout << id << "  " << fname << "  " << lname << std::endl;
+	}
+ 
+	EXEC SQL CLOSE cur_uczestnik;
+
+	
+    	
+	// close all connection
+	EXEC SQL DISCONNECT ALL;
+	return 0;
+}

@@ -1,0 +1,52 @@
+#include <stdlib.h>
+
+char * dbuser = "u9zaczyk";
+char * dbpass  = "9zaczyk";
+char * dbhost = "pascal";
+char * dbport = "5432"; 
+
+EXEC SQL BEGIN DECLARE SECTION;
+    char db[150];
+    char user[150];
+    char password[150];
+    char host[50];
+    char port[50];
+    char catalog[50];
+    char database[50];
+    char query[50];
+    char schema[50];
+    char schemas[100];
+    char uname[50];
+EXEC SQL END DECLARE SECTION;
+
+int main(){
+    strcpy(user, dbuser);
+    strcpy(password, dbpass);
+    strcpy(host, dbhost);
+    strcpy(port, dbport);
+
+    EXEC SQL CONNECT TO :db AS conn USER :user USING :password;
+
+    EXEC SQL SELECT current_catalog INTO :catalog;
+    printf("Catalog       = %s \n", catalog);
+
+    EXEC SQL SELECT current_database() INTO :database;
+    printf("Database      = %s \n", database);
+
+    EXEC SQL SELECT current_user INTO :uname;
+    printf("User          = %s \n", uname);
+
+    printf("Port          = %s \n", port);
+
+    EXEC SQL SELECT inet_client_port() INTO :port;
+    printf("Host          = %s \n", host);
+
+    EXEC SQL SELECT current_query() INTO :query;
+    printf("Query         = %s \n", query);
+
+    EXEC SQL SELECT current_schema() INTO :schema;
+    printf("Schema[()]    = %s \n", schema);
+
+    EXEC SQL DISCONNECT ALL;
+    return 0;
+}

@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+char * p_dbase = "DB1_lab02@localhost:5432";	//"tcp:postgresql://localhost:5432/DB1_lab02";
+char * p_user = "kursman";
+char * p_pass = "Passw0rd";
+
+EXEC SQL BEGIN DECLARE SECTION;
+	char dbname[1024];
+	char connection_string[128];
+	char user[64];
+	char password[32];
+
+	int id;
+	char fname[64];
+	char lname[64];
+EXEC SQL END DECLARE SECTION;
+
+int main()
+{
+	std::cout << "Postgres Embeded SQL Application" << std::endl << std::endl;
+	
+
+	// initialize SQL variable
+	strcpy_s(connection_string,p_dbase);
+	strcpy_s(user,p_user);
+	strcpy_s(password,p_pass);
+
+	// debuging connection
+	//ECPGdebug(1,stderr);
+	// Note: On Windows, if the ecpg libraries and an application are compiled with different flags,
+	// this function call will crash the application because the internal representation of the FILE pointers
+	// differ. Specifically, multithreaded/single-threaded, release/debug, and static/dynamic flags should be
+	// the same for the library and all applications using that library.
+
+	EXEC SQL CONNECT TO :connection_string AS conn  USER :user USING :password;
+
+	// print name of database
+	EXEC SQL SELECT current_database() INTO :dbname;
+
+	printf("current database=%s \n", dbname);
+	std::cout << "current database name is " << dbname << std::endl;
+	
+
+
+	EXEC SQL SELECT id_uczestnik,imie,nazwisko INTO :id, :fname, :lname FROM uczestnik LIMIT 1;
+
+	if( sqlca.sqlcode == 0 )
+	      std::cout << id << "  " << fname << "  " << lname << std::endl;
+	else
+	{
+		//printf(" SQLCA.SQLCODE: %i\n", sqlca.sqlcode);
+	        //printf(" SQLCA.SQLSTATE: %s\n", sqlca.sqlstate);
+	        //printf(" SQLCA.SQLERRM: %i  %s\n", sqlca.sqlerrm.sqlerrml, sqlca.sqlerrm.sqlerrmc);
+		std::cout << " SQLCA.SQLCODE:  " << sqlca.sqlcode << std::endl;
+		std::cout << " SQLCA.SQLSTATE: " << sqlca.sqlstate << std::endl;
+		std::cout << " SQLCA.SQLERRM: " << sqlca.sqlerrm.sqlerrml << "  " << sqlca.sqlerrm.sqlerrmc<< std::endl;
+
+	}
+
+    	
+	// close all connection
+	EXEC SQL DISCONNECT ALL;
+	return 0;
+}

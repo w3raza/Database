@@ -1,0 +1,7 @@
+Kod programów umieścić w pliku Nazwsko_Imie_13_1.zip ( pierwsza wersja na zajęciach ), Nazwsko_Imie_13_2.zip ( druga wersja po zajęciach )
+
+1. Wykorzystując dowolną postać GROUP BY dla kolumn product_name, customer_name napisać jedno polecenie, którego wynikiem jest zbiór danych jak w załączonym pliku zadanie1.csv. 
+
+2. Wykorzystując funkcje rankingowe napisać polecenie którego wynikiem jest zawartość pliku zadanie2.csv
+
+3. Wykorzystując funkcję crosstab napisać polecenie/polecenia, które prowadzi/ą do wyniku umieszczonego w pliku zadanie3.csv.

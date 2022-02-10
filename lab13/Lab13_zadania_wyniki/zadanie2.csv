@@ -1,0 +1,25 @@
+shipmode;region;row_number;denserankbyshipcost;shipcost;shipcostbyregion
+Delivery Truck;West;1;1;11925.21;24583.15
+Delivery Truck;Ontario;2;2;11191.49;23475.26
+Regular Air;West;3;3;10906.14;24583.15
+Regular Air;Ontario;4;4;10519.02;23475.26
+Delivery Truck;Prarie;5;5;10103.64;20870.93
+Regular Air;Prarie;6;6;9346.78;20870.93
+Delivery Truck;Atlantic;7;7;7022.57;1q
+Regular Air;Atlantic;8;8;6347.23;14460.83
+Delivery Truck;Quebec;9;9;5103.20;10543.34
+Regular Air;Quebec;10;10;4494.13;10543.34
+Delivery Truck;Yukon;11;11;3647.23;7469.81
+Regular Air;Yukon;12;12;3412.12;7469.81
+Delivery Truck;Northwest Territories;13;13;2582.90;5418.93
+Regular Air;Northwest Territories;14;14;2445.41;5418.93
+Express Air;Ontario;15;15;1764.75;23475.26
+Express Air;West;16;16;1751.80;24583.15
+Express Air;Prarie;17;17;1420.51;20870.93
+Express Air;Atlantic;18;18;1091.03;14460.83
+Express Air;Quebec;19;19;946.01;10543.34
+Regular Air;Nunavut;20;20;537.36;1008.79
+Express Air;Yukon;21;21;410.46;7469.81
+Delivery Truck;Nunavut;22;22;395.70;1008.79
+Express Air;Northwest Territories;23;23;390.62;5418.93
+Express Air;Nunavut;24;24;75.73;1008.79

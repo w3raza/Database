@@ -1,0 +1,67 @@
+#include <stdio.h>
+
+char * p_dbase = "DB1_lab02@localhost:5432";	//"tcp:postgresql://localhost:5432/DB1_lab02";
+char * p_user = "kursman";
+char * p_pass = "Passw0rd";
+
+EXEC SQL BEGIN DECLARE SECTION;
+	char dbname[1024];
+	char connection_string[128];
+	char user[64];
+	char password[32];
+
+	int id;
+	char fname[64];
+	char lname[64];
+	char insertCmd[512];
+EXEC SQL END DECLARE SECTION;
+
+
+
+// error handlers
+EXEC SQL WHENEVER SQLERROR CALL crash();
+EXEC SQL WHENEVER NOT FOUND DO BREAK;
+ 
+static void crash(void)
+{
+    // stop recursion
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+ 
+    fprintf(
+        stderr,
+        "database serious error %s:\n%s\n",
+        sqlca.sqlstate,
+        sqlca.sqlerrm.sqlerrmc
+    );
+ 
+    EXEC SQL ROLLBACK;
+    EXEC SQL DISCONNECT;
+ 
+    exit(1);
+ 
+    // restore the original handler
+    EXEC SQL WHENEVER SQLERROR CALL crash();
+}
+
+int main()
+{
+	std::cout << "Postgres Embeded SQL Application" << std::endl << std::endl;
+	
+
+	// initialize SQL variable
+	strcpy_s(connection_string,p_dbase);
+	strcpy_s(user,p_user);
+	strcpy_s(password,p_pass);
+
+
+	EXEC SQL CONNECT TO :connection_string AS conn  USER :user USING :password;
+
+	strcpy_s(insertCmd,"INSERT INTO uczestnik ( id_uczestnik, nazwisko, imie ) VALUES ( 113, 'Zaw', 'Pio')");
+
+	EXEC SQL EXECUTE IMMEDIATE :insertCmd;
+
+    	EXEC SQL COMMIT;
+	// close all connection
+	EXEC SQL DISCONNECT ALL;
+	return 0;
+}

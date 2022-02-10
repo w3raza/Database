@@ -1,0 +1,5 @@
+Kod programów umieścić w pliku Nazwsko_Imie_14_1.zip ( pierwsza wersja na zajęciach ).
+
+1. Wykorzystując XPATH pokazać osoby z emailem w domenie o2.pl
+
+2. Wykorzystując XPATH pokazać osoby z id w zakresie 10000 do 20000.

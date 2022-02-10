@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+char * dbuser = "u9zaczyk";
+char * dbpass  = "9zaczyk";
+char * dbhost = "pascal";
+char * dbport = "5432"; 
+
+EXEC SQL BEGIN DECLARE SECTION;
+        char user[150];
+        char password[150];
+        char host[50];
+        char port[50];
+        char email[64];
+        int id = 0;
+        bool is_email = false;
+EXEC SQL END DECLARE SECTION;
+
+int main(int argc, char** argv){
+        strcpy(user, dbuser);
+        strcpy(password, dbpass);
+        strcpy(host, dbhost);
+        strcpy(port, dbport);
+
+        if(argc >= 2){
+                id = atoi(argv[1]);
+        }
+
+        if(argc >= 3){
+                strcpy(email,argv[2]);
+                is_email = true;
+        }
+
+
+        EXEC SQL SET search_path TO lab04;
+
+        if(id != 0 && is_email){
+                EXEC SQL UPDATE uczestnik
+                        SET email          = :email
+                        WHERE id_uczestnik = :id;
+                printf("UPDATE\n");
+                printf("Id: %d\n", id);
+                printf("E-mail: %s\n", email);
+                        
+        }
+        else if(id == 0) 
+                printf("Nie podano ID\n");    
+        else
+                printf("Nie podano email\n");
+
+        EXEC SQL DISCONNECT ALL;
+        return 0;
+}
